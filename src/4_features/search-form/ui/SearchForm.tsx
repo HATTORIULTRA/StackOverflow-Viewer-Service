@@ -4,21 +4,21 @@ import { useAppDispatch } from "@/6_shared/hooks/redux.hooks";
 import { useState } from "react";
 import { searchQuestions } from "../model/searchSlice";
 import { Spinner } from "@/6_shared/components/ui/spinner";
+import { useNavigate } from "react-router";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const onSubmit = (e: any) => {
     e.preventDefault();
     dispatch(searchQuestions(query));
+    navigate(`results?q=${encodeURIComponent(query)}`);
     setQuery("");
   };
 
   return (
     <div className="text-center">
-      <h1 className="text-3xl font-bold mb-8 text-foreground">
-        StackOverflow Viewer
-      </h1>
       <form
         onSubmit={onSubmit}
         className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
