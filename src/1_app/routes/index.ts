@@ -9,7 +9,7 @@ export const router = createBrowserRouter([
     Component: App,
     children: [
       { index: true, Component: SearchPage },
-      { path: "/results", Component: ResultsPage },
+      { path: "results", Component: ResultsPage },
     ],
   },
 ]);
