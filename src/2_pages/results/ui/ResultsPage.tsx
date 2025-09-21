@@ -16,14 +16,14 @@ const ResultsPage = () => {
   const [searchParams] = useSearchParams();
   const { questions } = useAppSelector((state) => state.search);
   const dispatch = useAppDispatch();
-  
+
   const query = searchParams.get("q");
 
   useEffect(() => {
-    if (query) {
+    if (query && query?.trim().length > 0) {
       dispatch(searchQuestions(query));
     }
-  }, []);
+  }, [query, dispatch]);
 
   return (
     <div className="flex flex-col mb-6">
@@ -41,16 +41,29 @@ const ResultsPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {questions.map((item) => (
-            <TableRow key={item.question_id}>
-              <TableCell className="font-medium">
-                {item.owner.display_name}
+          {Array.isArray(questions) && questions.length > 0 ? (
+            questions.map((item) => (
+              <TableRow key={item.question_id}>
+                <TableCell className="font-medium">
+                  {item.owner?.display_name ?? "Unknown"}
+                </TableCell>
+                <TableCell>{item.title}</TableCell>
+                <TableCell>{item.answer_count}</TableCell>
+                <TableCell className="text-right">
+                  {item.tags?.[0] ?? "-"}
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={4}
+                className="text-center text-muted-foreground"
+              >
+                + No results found.
               </TableCell>
-              <TableCell>{item.title}</TableCell>
-              <TableCell>{item.answer_count}</TableCell>
-              <TableCell className="text-right">{item.tags[0]}</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>

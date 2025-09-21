@@ -1,18 +1,20 @@
 import { Button } from "@/6_shared/components/ui/button";
 import { Input } from "@/6_shared/components/ui/input";
-import { useAppDispatch } from "@/6_shared/hooks/redux.hooks";
-import { useState } from "react";
-import { searchQuestions } from "../model/searchSlice";
+import React, { useState } from "react";
 import { Spinner } from "@/6_shared/components/ui/spinner";
 import { useNavigate } from "react-router";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const onSubmit = (e: any) => {
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(searchQuestions(query));
+    const trimmedQuery = query.trim();
+    if(!trimmedQuery) {
+      return;
+    };
+
     navigate(`results?q=${encodeURIComponent(query)}`);
     setQuery("");
   };
