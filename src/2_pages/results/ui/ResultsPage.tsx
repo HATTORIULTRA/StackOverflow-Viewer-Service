@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { useAppDispatch, useAppSelector } from "@/6_shared/hooks/redux.hooks";
 import { searchQuestions } from "@/4_features/search-form/model/searchSlice";
 import { ResultsTable } from "@/4_features/results-table";
@@ -8,29 +8,24 @@ import { Spinner } from "@/6_shared/components/ui/spinner";
 import { getAuthorPosts } from "@/4_features/quick-view/model/quickViewSlice";
 
 const ResultsPage = () => {
-  const [openQuick, setOpenQuick] = useState(false);
+  const dialogRef = useRef(null);
+
   const [searchParams] = useSearchParams();
+  const [isOpened, setIsOpened] = useState(false)
   const { questions, isLoading } = useAppSelector((state) => state.search);
   console.log(questions)
   const dispatch = useAppDispatch();
 
   const query = searchParams.get("q");
 
-  const handleOpenQuick = (id: any) => {
-    setOpenQuick((prev) => !prev);
+  const handleOpenQuick = (id: number) => {
+    dialogRef.current?.showModal()
     dispatch(getAuthorPosts(id))
   };
 
-  useEffect(() => {
-    if (!openQuick) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpenQuick(false);
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [openQuick]);
+  const handleCloseOpenQuick = () => {
+    dialogRef.current?.close()
+  }
 
   useEffect(() => {
     if (query && query?.trim().length > 0) {
@@ -46,14 +41,13 @@ const ResultsPage = () => {
       {isLoading ? (
         <Spinner size="large" />
       ) : (
-        <ResultsTable openQuickView={handleOpenQuick} data={questions} />
+        <ResultsTable handleOpenQuick={handleOpenQuick} data={questions} />
       )}
 
-      {openQuick && (
-        <>
-          <div
+          <dialog
+             ref={dialogRef}
             className="fixed inset-0 bg-black/40 z-40"
-            onClick={() => setOpenQuick(false)}
+            onClick={() => handleCloseOpenQuick()}
           >
             <div
               className="fixed right-4 top-20 w-80 z-50"
@@ -61,9 +55,7 @@ const ResultsPage = () => {
             >
               <QuickView />
             </div>
-          </div>
-        </>
-      )}
+          </dialog>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const getAuthorPosts = createAsyncThunk(
     'quickView/getAuthorPosts',
-    async (id) => {
+    async (id: number) => {
         try {
             const res = await instance.get(`/users/${id}/questions`, {
         params: {
@@ -19,20 +19,21 @@ export const getAuthorPosts = createAsyncThunk(
 )
 
 const initialState = {
-    authorPosts: []
+    authorPosts: [],
+    isOpenedQuickView: false
 }
 
 export const quickViewSlice = createSlice({
     name: 'quickView',
     initialState,
-    reducers: {
-
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getAuthorPosts.fulfilled, (state, action) => {
             state.authorPosts = action.payload;
         })
     }
 })
+
+export const {} = quickViewSlice.actions;
 
 export default quickViewSlice.reducer;

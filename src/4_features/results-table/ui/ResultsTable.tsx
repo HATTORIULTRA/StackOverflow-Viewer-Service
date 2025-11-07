@@ -9,7 +9,10 @@ import {
 } from "@/6_shared/components/ui/table";
 import type { ResultsTableProps } from "../model/results-table.types";
 
-const ResultsTable = ({ data, openQuickView }: ResultsTableProps) => {
+
+const ResultsTable = ({ data, handleOpenQuick }: ResultsTableProps) => {
+    console.log('таблица перерес')
+  
   return (
     <Table>
       <TableCaption>A list of your search results.</TableCaption>
@@ -25,7 +28,7 @@ const ResultsTable = ({ data, openQuickView }: ResultsTableProps) => {
         {Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
             <TableRow key={item.question_id}>
-              <TableCell onClick={() => openQuickView(item.owner?.account_id)} className="font-medium">
+              <TableCell onClick={() => handleOpenQuick(item.owner?.account_id)} className="font-medium">
                 {item.owner?.display_name ?? "Unknown"}
               </TableCell>
               <TableCell>{item.title}</TableCell>
