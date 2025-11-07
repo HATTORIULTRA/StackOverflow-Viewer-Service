@@ -1,8 +1,7 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import { Button } from "@/6_shared/components/ui/button";
 import { Input } from "@/6_shared/components/ui/input";
-import React, { useState } from "react";
-import { Spinner } from "@/6_shared/components/ui/spinner";
-import { useNavigate } from "react-router";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
@@ -11,9 +10,9 @@ const SearchForm = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmedQuery = query.trim();
-    if(!trimmedQuery) {
+    if (!trimmedQuery) {
       return;
-    };
+    }
 
     navigate(`results?q=${encodeURIComponent(query)}`);
     setQuery("");
@@ -35,7 +34,6 @@ const SearchForm = () => {
           Find
         </Button>
       </form>
-      <Spinner />
     </div>
   );
 };

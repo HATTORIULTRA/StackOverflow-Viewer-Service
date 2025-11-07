@@ -1,6 +1,5 @@
 import { SearchForm } from "@/4_features/search-form"
 
-
 const SearchPage = () => {
   return (
     <div className="text-center">
